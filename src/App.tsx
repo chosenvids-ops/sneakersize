@@ -5,7 +5,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, RefreshCcw, Info, ArrowRightLeft, TrendingUp, X } from 'lucide-react';
+import { ChevronDown, RefreshCcw, Info, ArrowRightLeft, TrendingUp, X, ArrowLeft } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -171,6 +171,7 @@ export default function App() {
   const [selectedSystem, setSelectedSystem] = useState<'US' | 'UK' | 'EU' | 'CM'>('US');
   const [selectedSize, setSelectedSize] = useState<number | string>(9);
   const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
+  const [view, setView] = useState<'home' | 'privacy' | 'terms'>('home');
 
   // Derive the CM value based on current selection
   const currentCM = useMemo(() => {
@@ -237,8 +238,11 @@ export default function App() {
         {/* Header */}
         <header className="border-b border-white/10 bg-black/20 backdrop-blur-md sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1 overflow-hidden">
+            <button 
+              onClick={() => setView('home')}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer group text-left"
+            >
+              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1 overflow-hidden transition-transform group-hover:scale-105">
                 <img 
                   src="/sneaker.png" 
                   alt="Sneaker Size" 
@@ -247,16 +251,28 @@ export default function App() {
                 />
               </div>
               <h1 className="text-xl font-bold tracking-tighter">sneakersize.me</h1>
-            </div>
-          <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-neutral-400">
-            <button 
-              onClick={() => setIsHowItWorksOpen(true)}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              How it works
             </button>
+            <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-neutral-400">
+              <button 
+                onClick={() => setView('privacy')}
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Privacy
+              </button>
+              <button 
+                onClick={() => setView('terms')}
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Terms
+              </button>
+              <button 
+                onClick={() => setIsHowItWorksOpen(true)}
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                How it works
+              </button>
+            </div>
           </div>
-        </div>
       </header>
 
       {/* How it Works Modal */}
@@ -331,145 +347,223 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="max-w-4xl mx-auto px-4 py-12 md:py-20">
-        <div className="space-y-12">
-          
-          {/* Main Converter Section */}
-          <div className="space-y-12">
-            <section className="space-y-8">
-              <div className="space-y-2">
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-                  Instant sneaker size converter.
-                </h2>
-                <p className="text-neutral-400 text-lg md:text-xl max-w-2xl">
-                  Select your current brand and size to see matching fits across all major labels instantly.
-                </p>
-              </div>
+      <main className="max-w-4xl mx-auto px-4 py-12 md:py-20 relative z-10">
+        <AnimatePresence mode="wait">
+          {view === 'home' ? (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-12"
+            >
+              <section className="space-y-8">
+                <div className="space-y-2">
+                  <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+                    Instant sneaker size converter.
+                  </h2>
+                  <p className="text-neutral-400 text-lg md:text-xl max-w-2xl">
+                    Select your current brand and size to see matching fits across all major labels instantly.
+                  </p>
+                </div>
 
-              {/* Selector Controls */}
-              <div className="p-6 md:p-8 bg-neutral-900/50 border border-white/5 rounded-3xl space-y-8">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Brand Selector */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 ml-1">Current Brand</label>
-                    <div className="relative group">
-                      <select 
-                        value={selectedBrand}
-                        onChange={(e) => setSelectedBrand(e.target.value as Brand)}
-                        className="w-full h-14 bg-neutral-800 border-2 border-white/5 rounded-2xl px-4 appearance-none focus:border-neutral-100 transition-all outline-none cursor-pointer group-hover:bg-neutral-700/50"
-                      >
-                        {BRANDS.map(brand => (
-                          <option key={brand} value={brand}>{brand}</option>
+                {/* Selector Controls */}
+                <div className="p-6 md:p-8 bg-neutral-900/50 border border-white/5 rounded-3xl space-y-8">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Brand Selector */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 ml-1">Current Brand</label>
+                      <div className="relative group">
+                        <select 
+                          value={selectedBrand}
+                          onChange={(e) => setSelectedBrand(e.target.value as Brand)}
+                          className="w-full h-14 bg-neutral-800 border-2 border-white/5 rounded-2xl px-4 appearance-none focus:border-neutral-100 transition-all outline-none cursor-pointer group-hover:bg-neutral-700/50"
+                        >
+                          {BRANDS.map(brand => (
+                            <option key={brand} value={brand}>{brand}</option>
+                          ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Gender Selector */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 ml-1">Gender</label>
+                      <div className="flex bg-neutral-800 rounded-2xl p-1.5 h-14">
+                        {(['Men', 'Women'] as Gender[]).map((g) => (
+                          <button
+                            key={g}
+                            onClick={() => setSelectedGender(g)}
+                            className={cn(
+                              "flex-1 rounded-xl text-sm font-bold transition-all",
+                              selectedGender === g ? "bg-neutral-100 text-black shadow-lg" : "text-neutral-400 hover:text-white"
+                            )}
+                          >
+                            {g}
+                          </button>
                         ))}
-                      </select>
-                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 pointer-events-none" />
+                      </div>
                     </div>
                   </div>
 
-                  {/* Gender Selector */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-neutral-500 ml-1">Gender</label>
-                    <div className="flex bg-neutral-800 rounded-2xl p-1.5 h-14">
-                      {(['Men', 'Women'] as Gender[]).map((g) => (
+                  {/* Size Grid */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between px-1">
+                      <label className="text-xs font-bold uppercase tracking-widest text-neutral-500">Pick Your Size</label>
+                    </div>
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
+                      {availableSizes.map((size) => (
                         <button
-                          key={g}
-                          onClick={() => setSelectedGender(g)}
+                          key={String(size)}
+                          onClick={() => setSelectedSize(size)}
                           className={cn(
-                            "flex-1 rounded-xl text-sm font-bold transition-all",
-                            selectedGender === g ? "bg-neutral-100 text-black shadow-lg" : "text-neutral-400 hover:text-white"
+                            "h-12 flex items-center justify-center rounded-xl text-sm font-bold border-2 transition-all",
+                            selectedSize === size 
+                              ? "bg-neutral-100 border-neutral-100 text-black shadow-[0_0_20px_rgba(255,255,255,0.1)]" 
+                              : "bg-neutral-800 border-white/5 text-neutral-400 hover:border-neutral-600 hover:text-white"
                           )}
                         >
-                          {g}
+                          {size}
                         </button>
                       ))}
                     </div>
+                    <div className="mt-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                      <p className="text-[11px] text-neutral-500 leading-relaxed text-center">
+                        These conversions are approximate. Individual shoe models can vary in fit. Use as a general guide only.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Results Section */}
+              <section className="space-y-8">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h3 className="text-2xl font-bold flex items-center gap-2">
+                      <ArrowRightLeft className="w-6 h-6 text-neutral-400" />
+                      Converted Sizes
+                    </h3>
+                    <p className="text-neutral-500 text-sm">Matching fits based on length ({currentCM} cm)</p>
                   </div>
                 </div>
 
-                {/* Size Grid */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between px-1">
-                    <label className="text-xs font-bold uppercase tracking-widest text-neutral-500">Pick Your Size</label>
-                  </div>
-                  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-                    {availableSizes.map((size) => (
-                      <button
-                        key={String(size)}
-                        onClick={() => setSelectedSize(size)}
-                        className={cn(
-                          "h-12 flex items-center justify-center rounded-xl text-sm font-bold border-2 transition-all",
-                          selectedSize === size 
-                            ? "bg-neutral-100 border-neutral-100 text-black shadow-[0_0_20px_rgba(255,255,255,0.1)]" 
-                            : "bg-neutral-800 border-white/5 text-neutral-400 hover:border-neutral-600 hover:text-white"
-                        )}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <AnimatePresence mode="popLayout">
+                    {conversions.filter(c => c.brand !== selectedBrand).map((conv) => (
+                      <motion.div
+                        layout
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        key={conv.brand}
+                        className="group p-6 bg-neutral-900 border border-white/5 rounded-3xl hover:border-neutral-700 transition-all hover:shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
                       >
-                        {size}
-                      </button>
+                        <div className="flex items-start justify-between mb-4">
+                          <span className="text-lg font-bold">{conv.brand}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <p className="text-[10px] text-neutral-500 font-bold uppercase">US {selectedGender === 'Men' ? 'M' : 'W'}</p>
+                            <p className="text-2xl font-bold tabular-nums">
+                              {selectedGender === 'Men' ? conv.match.us_m : conv.match.us_w}
+                            </p>
+                          </div>
+                          <div className="space-y-1 pl-4 border-l border-white/10 text-right">
+                            <p className="text-[10px] text-neutral-500 font-bold uppercase">EU Size</p>
+                            <p className="text-2xl font-bold tabular-nums text-neutral-300">
+                              {conv.match.eu}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs font-medium text-neutral-500">
+                          <span>UK: {conv.match.uk}</span>
+                          <span>{conv.match.cm} cm</span>
+                        </div>
+                      </motion.div>
                     ))}
-                  </div>
-                  <div className="mt-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                    <p className="text-[11px] text-neutral-500 leading-relaxed text-center">
-                      These conversions are approximate. Individual shoe models can vary in fit. Use as a general guide only.
-                    </p>
-                  </div>
+                  </AnimatePresence>
+                </div>
+              </section>
+            </motion.div>
+          ) : view === 'privacy' ? (
+            <motion.div
+              key="privacy"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-2xl mx-auto space-y-8"
+            >
+              <button 
+                onClick={() => setView('home')}
+                className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors font-medium mb-4"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to converter
+              </button>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-bold tracking-tight">Privacy Policy</h2>
+                  <p className="text-neutral-500 font-medium">Last updated: April 2026</p>
+                </div>
+                <div className="space-y-4 text-neutral-400 leading-relaxed text-lg">
+                  <p>
+                    This website is a simple sneaker size conversion tool. We do not collect any personal information, do not use cookies, and do not track users.
+                  </p>
+                  <p>
+                    We do not store any data from your size selections.
+                  </p>
+                  <p>
+                    If you have any questions, you can contact us at the email listed in the footer.
+                  </p>
+                  <p className="pt-4 font-medium text-white italic">
+                    That's it. We respect your privacy.
+                  </p>
                 </div>
               </div>
-            </section>
-
-            {/* Results Section */}
-            <section className="space-y-8">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                   <h3 className="text-2xl font-bold flex items-center gap-2">
-                    <ArrowRightLeft className="w-6 h-6 text-neutral-400" />
-                    Converted Sizes
-                  </h3>
-                  <p className="text-neutral-500 text-sm">Matching fits based on length ({currentCM} cm)</p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="terms"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-2xl mx-auto space-y-8"
+            >
+              <button 
+                onClick={() => setView('home')}
+                className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors font-medium mb-4"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to converter
+              </button>
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-4xl font-bold tracking-tight">Terms of Service</h2>
+                  <p className="text-neutral-500 font-medium">Last updated: April 2026</p>
+                </div>
+                <div className="space-y-4 text-neutral-400 leading-relaxed text-lg">
+                  <p>
+                    This is a free sneaker size conversion tool. The conversions shown are approximate and for general guidance only. Actual fit can vary between different shoe models and brands.
+                  </p>
+                  <p>
+                    We are not responsible for any incorrect sizing or purchases made based on this tool.
+                  </p>
+                  <p className="font-bold text-neutral-200">
+                    Use at your own risk.
+                  </p>
+                  <p className="pt-4 font-medium text-white italic">
+                    By using this website, you agree to these terms.
+                  </p>
                 </div>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <AnimatePresence mode="popLayout">
-                  {conversions.filter(c => c.brand !== selectedBrand).map((conv) => (
-                    <motion.div
-                      layout
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      key={conv.brand}
-                      className="group p-6 bg-neutral-900 border border-white/5 rounded-3xl hover:border-neutral-700 transition-all hover:shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <span className="text-lg font-bold">{conv.brand}</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <p className="text-[10px] text-neutral-500 font-bold uppercase">US {selectedGender === 'Men' ? 'M' : 'W'}</p>
-                          <p className="text-2xl font-bold tabular-nums">
-                            {selectedGender === 'Men' ? conv.match.us_m : conv.match.us_w}
-                          </p>
-                        </div>
-                        <div className="space-y-1 pl-4 border-l border-white/10 text-right">
-                          <p className="text-[10px] text-neutral-500 font-bold uppercase">EU Size</p>
-                          <p className="text-2xl font-bold tabular-nums text-neutral-300">
-                            {conv.match.eu}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs font-medium text-neutral-500">
-                        <span>UK: {conv.match.uk}</span>
-                        <span>{conv.match.cm} cm</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
-            </section>
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
-      <footer className="border-t border-white/5 py-12 bg-black">
+      <footer className="border-t border-white/5 py-12 bg-black relative z-20">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-1">
             <div className="flex items-center gap-2">
@@ -483,11 +577,19 @@ export default function App() {
             </div>
             <span className="text-[10px] text-neutral-600 font-bold uppercase tracking-widest ml-7">Last updated: April 2026</span>
           </div>
-          <div className="flex gap-8 text-neutral-500 text-sm font-medium">
-            <a href="#" className="hover:text-white">Privacy</a>
-            <a href="#" className="hover:text-white">Terms</a>
-            <a href="#" className="hover:text-white">Contact</a>
+          <div className="flex gap-8 text-neutral-500 text-sm font-medium items-center">
+            <button onClick={() => setView('privacy')} className="hover:text-white transition-colors cursor-pointer py-1">Privacy</button>
+            <button onClick={() => setView('terms')} className="hover:text-white transition-colors cursor-pointer py-1">Terms</button>
           </div>
+        </div>
+
+        <div className="mt-12 flex flex-col items-center gap-2">
+          <p className="text-neutral-500 text-xs">
+            subculturebusinessemail@gmail.com
+          </p>
+          <p className="text-neutral-600 text-[11px] font-medium italic">
+            Quiet feedback welcome
+          </p>
         </div>
       </footer>
     </div>
