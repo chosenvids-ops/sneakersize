@@ -5,7 +5,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, RefreshCcw, Info, ArrowRightLeft, TrendingUp, X, ArrowLeft } from 'lucide-react';
+import { ChevronDown, RefreshCcw, Info, ArrowRightLeft, TrendingUp, X, ArrowLeft, Footprints } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -243,12 +243,7 @@ export default function App() {
               className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer group text-left"
             >
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1 overflow-hidden transition-transform group-hover:scale-105">
-                <img 
-                  src="/sneaker.png" 
-                  alt="Sneaker Size" 
-                  className="w-full h-full object-contain" 
-                  referrerPolicy="no-referrer"
-                />
+                <Footprints className="w-6 h-6 text-black" />
               </div>
               <h1 className="text-xl font-bold tracking-tighter">sneakersize.me</h1>
             </button>
@@ -567,12 +562,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-1">
             <div className="flex items-center gap-2">
-              <img 
-                src="/sneaker.png" 
-                alt="" 
-                className="w-5 h-5 object-contain grayscale opacity-50" 
-                referrerPolicy="no-referrer"
-              />
+              <Footprints className="w-5 h-5 text-neutral-500" />
               <span className="text-neutral-500 font-medium">© 2026 sneakersize.me</span>
             </div>
             <span className="text-[10px] text-neutral-600 font-bold uppercase tracking-widest ml-7">Last updated: April 2026</span>
