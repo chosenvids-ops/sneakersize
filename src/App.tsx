@@ -171,7 +171,7 @@ export default function App() {
   const [selectedSystem, setSelectedSystem] = useState<'US' | 'UK' | 'EU' | 'CM'>('US');
   const [selectedSize, setSelectedSize] = useState<number | string>(9);
   const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false);
-  const [view, setView] = useState<'home' | 'privacy' | 'terms'>('home');
+  const [view, setView] = useState<'home' | 'privacy' | 'terms' | 'about' | 'faq'>('home');
 
   // Derive the CM value based on current selection
   const currentCM = useMemo(() => {
@@ -249,8 +249,20 @@ export default function App() {
             </button>
             <div className="hidden sm:flex items-center gap-6 text-sm font-medium text-neutral-400">
               <button 
+                onClick={() => setView('about')}
+                className={cn("hover:text-white transition-colors cursor-pointer", view === 'about' && "text-white")}
+              >
+                About
+              </button>
+              <button 
+                onClick={() => setView('faq')}
+                className={cn("hover:text-white transition-colors cursor-pointer", view === 'faq' && "text-white")}
+              >
+                FAQ
+              </button>
+              <button 
                 onClick={() => setView('privacy')}
-                className="hover:text-white transition-colors cursor-pointer"
+                className={cn("hover:text-white transition-colors cursor-pointer", view === 'privacy' && "text-white")}
               >
                 Privacy
               </button>
@@ -482,6 +494,141 @@ export default function App() {
                 </div>
               </section>
             </motion.div>
+          ) : view === 'about' ? (
+            <motion.div
+              key="about"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-3xl mx-auto space-y-12"
+            >
+              <button 
+                onClick={() => setView('home')}
+                className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors font-medium mb-4"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to converter
+              </button>
+              
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+                    Sneaker Size Converter - Accurate Nike to Jordan Size Chart & Guide
+                  </h2>
+                  <div className="h-1 w-20 bg-neutral-100 rounded-full" />
+                </div>
+
+                <div className="prose prose-invert prose-lg max-w-none space-y-6 text-neutral-300">
+                  <p>
+                    Welcome to sneakersize.me, the most accurate and easy-to-use <strong>sneaker size converter</strong> on the web. Our platform serves as a definitive <strong>sneaker size guide</strong> for enthusiasts who want to ensure their next pair of kicks fits perfectly, no matter the brand. Whether you are performing a classic <strong>Nike to Jordan size</strong> lookup or exploring a new brand entirely, our tool is designed to eliminate the guesswork involved in online shopping.
+                  </p>
+
+                  <p>
+                    The core motivation behind sneakersize.me was to solve the "fit frustration" that many of us face. The global footwear market lacks a unified standard, meaning a <strong>sneaker size chart</strong> from one manufacturer can vary significantly from another. This leads to common questions like, "Wait, should I go half a size down for these?" or "Is a UK 9 the same as a US 10 across all brands?" Our <strong>shoe size conversion</strong> logic addresses these discrepancies by using Centimeters (CM) as the primary mapping unit. Because CM represents actual foot length, it is the most reliable metric for cross-brand comparisons.
+                  </p>
+
+                  <p>
+                    Using our <strong>sneaker size converter</strong> is simple. By selecting your current trusted brand and size, we instantly calculate the internal measurement of that shoe and match it against the official <strong>sneaker size chart</strong> of every other major label in our database. This includes everything from the precise <strong>Nike to Jordan size</strong> relationship to complex mappings for Yeezy, Adidas, Asics, and New Balance. We believe that a high-quality <strong>shoe size conversion</strong> should be accessible to everyone, which is why we’ve built this tool to be entirely free, fast, and privacy-focused.
+                  </p>
+
+                  <p>
+                    As your personal <strong>sneaker size guide</strong>, we stay updated on manufacturing shifts and sizing trends within the industry. We want you to spend less time worrying about return labels and more time enjoying your rotation. Whether you are a hardcore collector or just looking for a new pair of runners, having a reliable <strong>sneaker size chart</strong> at your fingertips is essential.
+                  </p>
+
+                  <p>
+                    In the ever-evolving world of streetwear and athletics, fit is everything. We are committed to refining our data to provide the best possible experience for our users. If you appreciate the simplicity and accuracy of our tool, feel free to share it with your fellow sneakerheads. Happy shopping!
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                  <div className="p-6 rounded-2xl bg-neutral-900 border border-white/5">
+                    <h3 className="text-xl font-bold mb-2">Our Mission</h3>
+                    <p className="text-neutral-400 text-sm leading-relaxed">
+                      To provide the sneaker community with a transparent, data-driven sizing tool that works for every major brand globally.
+                    </p>
+                  </div>
+                  <div className="p-6 rounded-2xl bg-neutral-900 border border-white/5">
+                    <h3 className="text-xl font-bold mb-2">Technical Standard</h3>
+                    <p className="text-neutral-400 text-sm leading-relaxed">
+                      We use official CM (centimeter) data as our universal anchor point, ensuring the highest possible accuracy for cross-label conversion.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ) : view === 'faq' ? (
+            <motion.div
+              key="faq"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-3xl mx-auto space-y-12"
+            >
+              <button 
+                onClick={() => setView('home')}
+                className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors font-medium mb-4"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to converter
+              </button>
+
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Sneaker Size Converter FAQ</h2>
+                </div>
+
+                <div className="space-y-8">
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">Is this sneaker size converter accurate?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Yes. We use official brand size charts and centimeter measurements to provide the most accurate conversions possible.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">How does the shoe size conversion work?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      We convert sizes using the actual CM length of each brand’s sizing chart instead of guessing between US sizes.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">Is Nike to Jordan size the same?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Usually yes. Jordan Brand is owned by Nike and uses a very similar sizing chart.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">Why do different sneaker brands have different sizes?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Each brand uses different shoe forms and fits. That’s why a Nike 10 is often not the same as an Adidas 10.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">How do I measure my foot correctly?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Place your heel against a wall and measure from heel to your longest toe in centimeters.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">Is this sneaker size converter free?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Yes, completely free. No sign up or payment required.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-white">What is the most reliable way to convert sizes?</h3>
+                    <p className="text-neutral-400 leading-relaxed">
+                      Using centimeter (CM) measurements is the most accurate method across all brands.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           ) : view === 'privacy' ? (
             <motion.div
               key="privacy"
@@ -568,6 +715,8 @@ export default function App() {
             <span className="text-[10px] text-neutral-600 font-bold uppercase tracking-widest ml-7">Last updated: April 2026</span>
           </div>
           <div className="flex gap-8 text-neutral-500 text-sm font-medium items-center">
+            <button onClick={() => setView('about')} className="hover:text-white transition-colors cursor-pointer py-1">About</button>
+            <button onClick={() => setView('faq')} className="hover:text-white transition-colors cursor-pointer py-1">FAQ</button>
             <button onClick={() => setView('privacy')} className="hover:text-white transition-colors cursor-pointer py-1">Privacy</button>
             <button onClick={() => setView('terms')} className="hover:text-white transition-colors cursor-pointer py-1">Terms</button>
           </div>
